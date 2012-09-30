@@ -1,0 +1,9 @@
+package com.prystupa
+
+rule "When there is a fire turn on the sprinkler"
+when
+    Fire($room:room)
+    $sprinkler:Sprinkler(room == $room, on == false)
+then
+    modify($sprinkler) { setOn(true) };
+end
