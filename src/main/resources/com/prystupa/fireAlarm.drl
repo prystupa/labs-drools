@@ -7,3 +7,28 @@ when
 then
     modify($sprinkler) { setOn(true) };
 end
+
+
+rule "When the fire is gone turn off the sprinkler"
+when
+    $room: Room()
+    $sprinkler: Sprinkler(room == $room, on == true)
+    not Fire(room == $room)
+then
+    modify($sprinkler) { setOn(false) };
+end
+
+rule "Raise the alarm when we have one or more fires"
+when
+    exists Fire()
+then
+    insert(new Alarm());
+end
+
+rule "Cancel the alarm when all of the fires have gone"
+when
+    not Fire()
+    $alarm: Alarm()
+then
+    retract($alarm);
+end
